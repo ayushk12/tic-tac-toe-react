@@ -8,6 +8,7 @@ class Game extends Component {
       xIsNext: true,
       stepNumber: 0,
       history: [{ squares: Array(9).fill(null) }],
+      // showModal: false,
     };
   }
   jumpTo(step) {
@@ -34,19 +35,19 @@ class Game extends Component {
       stepNumber: history.length,
     });
   }
+  // handleOpen = () => this.setState({ showModal });
+  // handleClose = () => this.setState({ showModal });
 
-  // handleClick=()=> this.setState({isShowingModal:true})
-  // handleClose = ()=> this.setState({isShowingModal:false})
-  renderModal() {
-    return (
-      <>
-        <img
-          src="https://media.giphy.com/media/2gtoSIzdrSMFO/giphy.gif"
-          alt=""
-        />
-      </>
-    );
-  }
+  // renderModal() {
+  //   return (
+  //     <>
+  //       <div>
+  //         open= {this.state.showModal}
+  //         close={this.handleClose}
+  //       </div>
+  //     </>
+  //   );
+  // }
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -68,7 +69,7 @@ class Game extends Component {
     let status;
     if (winner) {
       status = "Winner is " + winner;
-      status = this.renderModal();
+      //   status = this.renderModal();
     } else {
       status = "Next Player is " + (this.state.xIsNext ? "X" : "O");
     }
