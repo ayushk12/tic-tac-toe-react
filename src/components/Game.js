@@ -8,7 +8,6 @@ class Game extends Component {
       xIsNext: true,
       stepNumber: 0,
       history: [{ squares: Array(9).fill(null) }],
-      isShowingModal: false,
     };
   }
   jumpTo(step) {
@@ -41,7 +40,10 @@ class Game extends Component {
   renderModal() {
     return (
       <>
-        <img src="https://media.giphy.com/media/2gtoSIzdrSMFO/giphy.gif" />
+        <img
+          src="https://media.giphy.com/media/2gtoSIzdrSMFO/giphy.gif"
+          alt=""
+        />
       </>
     );
   }

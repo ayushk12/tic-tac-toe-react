@@ -125,8 +125,10 @@ body {
 }
 /* Game Info */
 ul {
-  padding-left: 30px;
+  padding-left: 40px;
+  margin-top: auto;
 }
+
 .game-info {
   margin-left: 100px;
 }
