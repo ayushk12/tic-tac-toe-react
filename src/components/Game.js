@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Board from "./Board";
+import Modal from "@material-ui/core/Modal";
+import draw from "../static/draw.gif";
 
 class Game extends Component {
   constructor(props) {
@@ -8,15 +10,27 @@ class Game extends Component {
       xIsNext: true,
       stepNumber: 0,
       history: [{ squares: Array(9).fill(null) }],
-      // showModal: false,
+      showModal: false,
     };
   }
-  jumpTo(step) {
+
+  openDialog() {
+    this.setState({ showModal: true });
+  }
+
+  jumpTo = (step) => {
     this.setState({
       stepNumber: step,
       xIsNext: step % 2 === 0,
     });
-  }
+  };
+
+  reset = () => {
+    this.jumpTo(0);
+    this.setState({
+      history: [{ squares: Array(9).fill(null) }],
+    });
+  };
 
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -35,41 +49,32 @@ class Game extends Component {
       stepNumber: history.length,
     });
   }
-  // handleOpen = () => this.setState({ showModal });
-  // handleClose = () => this.setState({ showModal });
 
-  // renderModal() {
-  //   return (
-  //     <>
-  //       <div>
-  //         open= {this.state.showModal}
-  //         close={this.handleClose}
-  //       </div>
-  //     </>
-  //   );
-  // }
+  listOfMoves = (move, desc) => {
+    return (
+      <li key={move}>
+        <button
+          onClick={() => {
+            this.jumpTo(move);
+          }}
+        >
+          {desc}
+        </button>
+      </li>
+    );
+  };
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
-      const desc = move ? "Go to #" + move : "Start the Game";
-      return (
-        <li key={move}>
-          <button
-            onClick={() => {
-              this.jumpTo(move);
-            }}
-          >
-            {desc}
-          </button>
-        </li>
-      );
+      const desc = move ? "Undo step" + move : "Start the Game";
+      return this.listOfMoves(move, desc);
     });
     let status;
     if (winner) {
       status = "Winner is " + winner;
-      //   status = this.renderModal();
     } else {
       status = "Next Player is " + (this.state.xIsNext ? "X" : "O");
     }
@@ -85,6 +90,19 @@ class Game extends Component {
           <div>{status}</div>
           <ul>{moves}</ul>
         </div>
+        <Modal open={winner} className="modal">
+          <div className="modal-content">
+            <h1>{winner === "draw" ? `Draw` : `Winner is ${winner}`}</h1>
+            <img
+              src={
+                winner === "draw"
+                  ? draw
+                  : "https://media.giphy.com/media/yoJC2JaiEMoxIhQhY4/giphy.gif"
+              }
+            />
+            <button onClick={() => this.reset()}>Re Start</button>
+          </div>
+        </Modal>
       </div>
     );
   }
@@ -106,6 +124,10 @@ function calculateWinner(squares) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
       return squares[a];
+    }
+    const filled = squares.filter((cell) => cell);
+    if (filled.length === 9) {
+      return "draw";
     }
   }
 
